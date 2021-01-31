@@ -1,0 +1,199 @@
+<html>
+    <head>
+        <title>Ninja Man</title>
+        <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .wall{
+            background-color: tomato;
+            height: 40px;
+            width: 40px;
+            display: inline-block;
+        }
+        .sushi{
+            background-color: black;
+            height: 40px;
+            width: 40px;
+            display: inline-block;
+            background-image: url('img/sushi.png');
+            background-size: contain;
+            
+        }
+        .bluey{
+            background-color: black;
+            height: 40px;
+            width: 40px;
+            display: inline-block;
+            background-image: url('img/bluey.gif');
+            background-size: contain;
+            
+        }
+        .pumpky{
+            background-color: black;
+            height: 40px;
+            width: 40px;
+            display: inline-block;
+            background-image: url('img/pumpky.gif');
+            background-size: contain;
+            
+        }
+        
+        .blank{
+            background-color: black;
+            height: 40px;
+            width: 40px;
+            display: inline-block;
+
+        }
+        #ninjaman {
+            background-color: green;
+            height: 40px;
+            width: 40px;
+            display: inline-block;
+            background-image: url('img/ninja.gif');
+            background-size: contain;
+            position: absolute;
+            top: 40px;
+            left: 40px;
+        }
+      
+        #score {
+            text-align: left;
+            margin: 10px;
+        }
+        #title {
+            margin: 10px;
+            font-size: 30px;
+        }
+        </style>
+
+    </head>
+    <body>
+        
+        <div id="world" ></div>
+        <div id="ninjaman"></div>
+        <div id="title">Ninja Pacman</div>
+        <div id="over" style="font-size: 50px;"></div>
+        
+        
+        
+
+    </body>
+    <script type="text/javascript">
+        var world = [
+            [1,1,1,1,1],
+            [1,0,4,0,1],
+            [1,2,1,2,1],
+            [1,0,2,0,1],
+            [1,0,1,1,1],
+            [1,0,1,1,1],
+            [1,0,3,2,1],
+            [1,2,1,0,1],
+            [1,2,4,0,1],
+            [1,1,1,0,1],
+            [1,1,1,0,1],
+            [1,0,0,2,1],
+            [1,2,1,0,1],
+            [1,0,3,2,1],
+            [1,1,1,1,1]
+        ];
+        var worldDict = {
+            0: 'blank',
+            1: 'wall',
+            2: 'sushi',
+            3: 'bluey',
+            4: 'pumpky'
+        }
+        var score = 0;
+
+        function drawWorld(){
+            output = "";
+            for(var row = 0; row < world.length; row++){
+                output+= "<div class = 'row'>"
+                for(var x = 0; x < world[row].length; x++){
+                    output += "<div class='" +worldDict[world[row][x]]+"'></div>"
+                    //worldDict[world[row][x]];
+                }
+                output += "</div>"
+            }
+            output += "<h3 id='score'>Score: " + score + "</h3>"
+            document.getElementById('world').innerHTML = output;
+        }
+        drawWorld();
+
+        //ninjamans coordinates
+        var ninjaman = {
+            x: 1, //horizontal
+            y: 1 //vertical
+        }
+        //draw ninjaman
+        function drawNinjaman(){
+            document.getElementById('ninjaman').style.top = ninjaman.y * 40 + 'px';
+            document.getElementById('ninjaman').style.left = ninjaman.x * 40 + 'px';
+        }
+        //key functionality
+        document.onkeydown = function(e){
+            if(e.keyCode == 37){ //left
+                if(world[ninjaman.y][ninjaman.x-1] != 1){
+                    ninjaman.x--;
+                    if(world[ninjaman.y][ninjaman.x+1] > 1){
+                        
+                        world[ninjaman.y][ninjaman.x+1] = 0;
+                        score++;
+
+                    }
+                }
+                
+
+            }
+            if(e.keyCode == 39){ //right
+                if(world[ninjaman.y][ninjaman.x+1] != 1){
+                    ninjaman.x++;
+                    if(world[ninjaman.y][ninjaman.x-1] > 1){
+                        
+                        world[ninjaman.y][ninjaman.x-1] = 0;
+                        score++;
+
+                    }
+                }
+            }
+            if(e.keyCode == 38){ //up
+                if(world[ninjaman.y-1][ninjaman.x] != 1){
+                    ninjaman.y--;
+                    if(world[ninjaman.y+1][ninjaman.x] > 1){
+                        
+                        world[ninjaman.y+1][ninjaman.x] = 0;
+                        score++;
+
+                    }
+                }
+            }
+            if(e.keyCode == 40){ //down
+                if(world[ninjaman.y+1][ninjaman.x] != 1){
+                    ninjaman.y++;
+                    if(world[ninjaman.y-1][ninjaman.x] > 1){
+                        
+                        world[ninjaman.y-1][ninjaman.x] = 0;
+                        score++;
+
+                    }
+                }
+            }
+            drawNinjaman();
+            drawWorld();
+            if(score == 13){
+                document.getElementById('over').innerHTML = "Game over, you win!";
+                document.getElementById('over').style.color = "red";
+                drawWorld();
+            }
+            
+
+            
+            
+        }
+
+    </script>
+</html>
